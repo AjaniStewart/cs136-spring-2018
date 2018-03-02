@@ -1,5 +1,4 @@
 #include <string>
-#include <cmath>
 std::string box(int width, int height)
 {
     std::string str = "";
@@ -32,14 +31,57 @@ std::string checkerboard(int width, int height)
 std::string cross(int size)
 {
     std::string str = "";
-    for (int i = 0; i < size; ++i)
+    for (int height = 1; height < size + 1 ; ++height)
     {
-        for (int j = 0; j < i; ++j) //print leading whitespace
+        for (int width = 0; width < size + 1; ++width)
+            if (height == width || width + height == size + 1)
+                str.append("*");
+            else
+                str.append(" ");
+        str.append("\n");
+    }
+    return str;
+}
+
+std::string lower(int length)
+{
+    std::string str = "";
+    for (int i = 0; i < length; ++i)
+    {
+        for (int j = 0; j < i + 1; ++j)
+            str.append("*");
+        str.append("\n");
+    }
+    return str;
+}
+
+std::string upper(int length)
+{
+    std::string str = "";
+    for (int i = 0; i < length; ++i)
+    {
+        for (int j = 0; j < i; ++j)
             str.append(" ");
-        str.append("*");
-        for (int k = i + 1; k < size - i); ++k)
+        for (int k = i; k < length; ++k)
+            str.append("*");
+        str.append("\n");
+    }
+    return str;
+}
+
+std::string trapezoid(int width, int height)
+{
+    if (height * 2 > width) return "";
+
+    std::string str = "";
+    for (int i = 0; i < height; ++i)
+    {
+        for (int j = 0; j < i; ++j)
             str.append(" ");
-        str.append("*\n");
+        for (int k = i; k < width - i; ++k)
+            str.append("*");
+
+        str.append("\n");
     }
     return str;
 }
