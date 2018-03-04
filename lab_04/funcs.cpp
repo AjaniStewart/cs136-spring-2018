@@ -1,4 +1,5 @@
 #include <string>
+
 std::string box(int width, int height)
 {
     std::string str = "";
@@ -82,6 +83,35 @@ std::string trapezoid(int width, int height)
             str.append("*");
 
         str.append("\n");
+    }
+    return str;
+}
+
+std::string checkerboard33(int width, int height)
+{
+    std::string str = "", temp = "";
+    bool stars = true;
+
+    for (int i = 0; i < height; ++i)
+    {
+        if (i % 3 == 0)
+        {
+            stars = !stars;
+            temp = "";
+            for (int j = 0; j < width; ++j)
+            {
+                if ((j + i)% 3 == 0 )
+                     stars = !stars;
+                
+                if (stars)
+                    temp.append("*");
+                else
+                    temp.append(" ");
+            }
+            
+        }
+        //stars = !stars;
+        str.append(temp + "\n");
     }
     return str;
 }

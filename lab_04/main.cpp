@@ -33,5 +33,13 @@ int main()
     s = trapezoid(12,7);
     std::cout << s;
     std::cout << "\n";
+
+    std::cout << "Printing 16 x 23 checkerboard\n";
+    s = checkerboard33(16, 23);
+    std::cout << s;
+
+    std::cout << "printing 30 x 30 33checkerboard\n";
+    s = checkerboard33(30,30);
+    std::cout << s;
     return 0;
 }
