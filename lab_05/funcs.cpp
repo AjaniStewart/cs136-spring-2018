@@ -1,10 +1,7 @@
-#include <cmath>
-
 bool isDivisibleBy(int n, int d)
 {
     return n % d == 0;
 }
-
 
 //rewrite
 bool isPrime(int n)
@@ -28,6 +25,7 @@ bool isPrime(int n)
 
 int nextPrime(int n)
 {
+    if (n < 2) return 2;
     if (n == 2) return 3;
     bool foundPrime = false;
 
@@ -43,7 +41,7 @@ int nextPrime(int n)
 int countPrimes(int start, int end)
 {
     int count = 0;
-    for (int i = start; i < end; ++i)
+    for (int i = start; i <= end; ++i)
     {
         if (isPrime(i))
             ++count;
@@ -56,3 +54,26 @@ bool isTwinPrime(int n)
     return (isPrime(n) && (isPrime(n+2) || isPrime(n-2)));
 }
 
+int nextTwinPrime(int n)
+{
+    int start = n;
+
+    bool foundTwinPrime = false;
+    while (!foundTwinPrime)
+    {
+        ++start;
+        if (isTwinPrime(start))
+            foundTwinPrime = true;
+        
+    }
+    return start;
+}
+
+int largestTwinPrime(int a, int b)
+{
+    for (int i = b; i >= a; --i)
+        if (isTwinPrime(i))
+            return i;
+
+    return -1;
+}
