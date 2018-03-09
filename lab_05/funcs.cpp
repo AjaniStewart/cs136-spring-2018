@@ -3,7 +3,6 @@ bool isDivisibleBy(int n, int d)
     return n % d == 0;
 }
 
-//rewrite
 bool isPrime(int n)
 {
     //takes advatage of the fact that primes > 5

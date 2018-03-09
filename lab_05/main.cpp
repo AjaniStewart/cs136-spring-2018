@@ -17,8 +17,4 @@ int main()
     std::cout << nextTwinPrime(7) << " is the next twin prime after 7\n";
 
     std::cout << "The largest twin prime between 0 and 100 is " << largestTwinPrime(0,100) << std::endl;
-
-
-
-
 }
