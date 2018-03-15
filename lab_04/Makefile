@@ -5,7 +5,12 @@ main: main.o funcs.o
 
 main.o: main.cpp funcs.h
 
+
 funcs.o: funcs.cpp funcs.h
 
 clean:
 	rm *.o
+
+debug:
+	g++ -g $(CXXFLAGS) main.cpp funcs.o
+	gdb a.out
