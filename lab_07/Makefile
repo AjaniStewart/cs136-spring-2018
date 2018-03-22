@@ -14,6 +14,5 @@ tests: tests.o funcs.o
 
 tests.o: tests.cpp funcs.h doctest.h
 
-
 clean:
 	rm -f $(OBJECTS) tests.o main tests
