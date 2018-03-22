@@ -46,8 +46,9 @@ std::string encryptCaesar(std::string plainText, int rShift)
 //for vigenere
 char shiftChar(char c, char k)
 {
-    char r = ' ';
-    return r;
+   //check if k is lower
+   //add k - 1
+    
 }
 
 std::string encryptVigenere(std::string plaintext, std::string keyword)
