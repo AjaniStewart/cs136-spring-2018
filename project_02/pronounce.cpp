@@ -1,7 +1,7 @@
 /*
 Author: Ajani Stewart
 Course: CSCI-135
-Instructor: Shankar
+Instructor: Professor Shankar
 Assignment: Project 2
 
 The program accepts a word and the program outputs
@@ -43,7 +43,8 @@ void splitOnSpace(string s, string &before, string &after)
         i++;
     }
 }
-
+//check if first character is ;
+//
 int main()
 {
 
