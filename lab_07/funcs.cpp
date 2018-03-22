@@ -29,31 +29,41 @@ char shiftChar(char c, int rShift)
     return static_cast<char>(s);
 }
 
-std::string encryptCaesar(std::string plainText, int rShift)
+std::string encryptCaesar(std::string plaintext, int rShift)
 {
     std::string cipher = "";
-    for (int i = 0, s = plainText.size(); i < s; ++i)
+    for (int i = 0, s = plaintext.size(); i < s; ++i)
     {
         //check if it is valid character
-        if (isLetter(plainText[i]))
-            cipher += shiftChar(plainText[i], rShift);
+        if (isLetter(plaintext[i]))
+            cipher += shiftChar(plaintext[i], rShift);
         else
-            cipher += plainText[i];
+            cipher += plaintext[i];
     }
     return cipher;
-}
-
-//for vigenere
-char shiftChar(char c, char k)
-{
-   //check if k is lower
-   //add k - 1
-    
 }
 
 std::string encryptVigenere(std::string plaintext, std::string keyword)
 {
     std::string cipher = "";
+    for (int i = 0, s = plaintext.size(); i < s; ++i)
+    {
+        if (isLetter(plaintext[i]))
+        {
+            char curKeyLetter = keyword[i % keyword.size()];
+            int shift;
+            if (isLower(curKeyLetter))
+            {
+                shift = static_cast<int>(curKeyLetter) - 'a';
+            }
+            else
+            {
+                shift = static_cast<int>(curKeyLetter) - 'A';
+            }
+            cipher += shiftChar(plaintext[i], shift);
+        }
+        else
+            cipher += plaintext[i];
+    }
     return cipher;
-
 }
