@@ -1,7 +1,7 @@
 /*
 Author: Ajani Stewart
 Course: CSCI-135
-Instructor: Professor Shankar
+Instructor: Professor Marayash
 Assignment: Project 2
 
 The program accepts a word and the program outputs
@@ -69,7 +69,7 @@ bool isValid(string s)
 }
 
 //if it has everthing in pho + one more, return true
-bool addPhoneme(string sPho, string pho)
+bool isAddedPhoneme(string sPho, string pho)
 {
     for (int i = 0; i < pho.size(); ++i)
     {

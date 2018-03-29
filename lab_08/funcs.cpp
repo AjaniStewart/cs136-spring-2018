@@ -1,6 +1,5 @@
 #include <string>
 #include <cctype>
-#include <iostream>
 
 std::string removeLeadingSpaces(std::string line)
 {
