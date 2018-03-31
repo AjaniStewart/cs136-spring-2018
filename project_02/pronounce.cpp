@@ -137,12 +137,41 @@ bool isRemovedPhoneme(const string& targetPho, const string& curPho)
     return true;
 }
 
+bool isReplacedPhoneme(const string& targetPho, const string& curPho)
+{
+    //check phoneme count
+    if (countPhonemes(targetPho) != countPhonemes(curPho))
+        return false;
+    //iterate over the smaller string to prevent seg faults
+    int size = targetPho.size() > curPho.size() ? curPho.size() : targetPho.size(); 
+
+    for (int i = 0; i < size; ++i)
+    {
+        if (targetPho[i] != curPho[i])
+        {
+            //go to the next space in both
+            int cCount = i;
+            int tCount = i;
+            while (curPho[cCount] != ' ')
+                cCount++;
+            while (targetPho[tCount] != ' ')
+                tCount++;
+            //check if the rest of the phonemes are th same
+            return (subString(targetPho, tCount, targetPho.size()) ==
+                    subString(curPho, cCount, curPho.size()));
+
+        }
+    }
+    
+    return false;
+}
+
 int main()
 {
     string input;
     cin >> input;
     string uInput = toUpper(input); 
-    string line, phoneme, identicals, addedPhonemes, removedPhonemes;
+    string line, phoneme, identicals, addedPhonemes, removedPhonemes, replacedPhonemes;
     bool found = false;
     fstream dictFile("cmudict.0.7a");
     //first pass to find the inital pronunciatino
@@ -188,10 +217,13 @@ int main()
             addedPhonemes += word + ' ';
         else if (isRemovedPhoneme(phoneme,pho))
             removedPhonemes += word + ' ';
+        else if (isReplacedPhoneme(phoneme,pho))
+            replacedPhonemes += word + ' ';
 
     }
     cout << "Identical        :" << identicals;
     cout << "\nAdd phoneme      : " << addedPhonemes;
-    cout << "\nRemove phoneme   : " << removedPhonemes;  
-     return 0;
+    cout << "\nRemove phoneme   : " << removedPhonemes;
+    cout << "\nReplace phoneme  : " << replacedPhonemes;
+    return 0;
 }
