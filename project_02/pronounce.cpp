@@ -14,14 +14,8 @@ using a dictionary file in the working directory
 #include <string>
 
 using namespace std;
-//Ignore lines that start with ;;;
-//Ignore words that contain non-alphabet characters except '
-//return the pho deconstruction of the word
-//print identical sounding words (all of those phos + one extra)
-//print identical sounding words (all of those phos - one)
-//print words with one pho replaced
 
-//heler functions
+//helper functions
 void splitOnSpace(string s, string &before, string &after)
 {
     // reset strings
@@ -120,9 +114,27 @@ bool isAddedPhoneme(const string& targetPho, const string& curPho)
     return true;
 }
 
+//similar to isAddedPhoneme
 bool isRemovedPhoneme(const string& targetPho, const string& curPho)
 {
-
+    if (countPhonemes(curPho) + 1 != countPhonemes(targetPho))
+        return false;
+    
+    int lastSpaceIndex = 0;
+    for (int i = 0; i < curPho.size(); ++i)
+    {
+        if (curPho[i] == ' ')
+            lastSpaceIndex = i;
+        if (targetPho[i] != curPho[i])
+        {
+            int count = i;
+            while (targetPho[count] != ' ')
+                count++;
+            return (subString(targetPho, count,targetPho.size()) == 
+                    subString(curPho, lastSpaceIndex, curPho.size()));
+        }
+    }
+    return true;
 }
 
 int main()
@@ -130,7 +142,7 @@ int main()
     string input;
     cin >> input;
     string uInput = toUpper(input); 
-    string line, phoneme, identicals, addedPhonemes;
+    string line, phoneme, identicals, addedPhonemes, removedPhonemes;
     bool found = false;
     fstream dictFile("cmudict.0.7a");
     //first pass to find the inital pronunciatino
@@ -169,13 +181,17 @@ int main()
         splitOnSpace(line, word, pho);
         //skip if it doesn't contain valid characters
         if (!isValid(word)) continue;
+        //check for the stuff
         if (pho == phoneme && word != uInput)
-            identicals += word;
-
-        if (isAddedPhoneme(phoneme, pho))
+            identicals += word + ' ';
+        else if (isAddedPhoneme(phoneme, pho))
             addedPhonemes += word + ' ';
+        else if (isRemovedPhoneme(phoneme,pho))
+            removedPhonemes += word + ' ';
+
     }
     cout << "Identical        :" << identicals;
-    cout << "\nAdd phoneme      :" << addedPhonemes;
-    return 0;
+    cout << "\nAdd phoneme      : " << addedPhonemes;
+    cout << "\nRemove phoneme   : " << removedPhonemes;  
+     return 0;
 }
