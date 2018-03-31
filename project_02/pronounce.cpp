@@ -45,7 +45,7 @@ void splitOnSpace(string s, string &before, string &after)
 }
 
 //to normalize inputs
-string toUpper(string s)
+string toUpper(const string& s)
 {
     string str = "";
     for (int i = 0; i < s.size(); ++i)
@@ -58,7 +58,7 @@ string toUpper(string s)
     return str;
 }
 
-bool isValid(string s)
+bool isValid(const string& s)
 {
     for (int i = 0; i < s.size(); ++i)
     {
@@ -68,21 +68,69 @@ bool isValid(string s)
     return true;
 }
 
-//if it has everthing in pho + one more, return true
-bool isAddedPhoneme(string sPho, string pho)
+int countPhonemes(const string& phonemes)
 {
-    for (int i = 0; i < pho.size(); ++i)
+    int count = 0;
+    for (int i = 0; i < phonemes.size(); ++i)
     {
-        
+        if (phonemes[i] == ' ')
+            count++;
     }
+    return count;
 }
-//
+
+string subString(const string& str, int start, int end)
+{
+    string s = "";
+    for (int i = start; i <= end; ++i)
+        s += str[i];
+    return s;
+}
+
+//--------------------------driver funcs-------------------------
+
+//targetPho is the phonemes of the user inputted word
+
+//if it has everthing in pho + one more, return true
+bool isAddedPhoneme(const string& targetPho, const string& curPho)
+{
+    //It's not a valid one if it has more than one more phoneme than the target word
+    if (countPhonemes(curPho) != countPhonemes(targetPho) + 1)
+        return false;
+    //remember where the last space was
+    int lastSpaceIndex = 0;
+    for (int i = 0; i < targetPho.size(); ++i)
+    {
+        //update the value of lastSpaceIndex when new space is encountered
+        if (targetPho[i] == ' ')
+            lastSpaceIndex = i;
+
+        if (targetPho[i] != curPho[i])
+        {
+            //go to the next space in targetPho
+            int count = i;
+            while (curPho[count] != ' ')
+                count++;
+            //compare the rest of the two strings; if they are equal, curPho is an added phoneme
+            return (subString(targetPho, lastSpaceIndex, targetPho.size()) ==
+                    subString(curPho, count, curPho.size()));
+        }
+    }
+    //if the loop ends normally, then the added phoneme must be at the end
+    return true;
+}
+
+bool isRemovedPhoneme(const string& targetPho, const string& curPho)
+{
+
+}
+
 int main()
 {
     string input;
     cin >> input;
     string uInput = toUpper(input); 
-    string line, phoneme;
+    string line, phoneme, identicals, addedPhonemes;
     bool found = false;
     fstream dictFile("cmudict.0.7a");
     //first pass to find the inital pronunciatino
@@ -110,8 +158,9 @@ int main()
         return 0;
     }
     //reset to the top of the file
-    cout << "Identical        :"; 
     dictFile.seekg(0, ios::beg);
+
+    //main loop
     while (getline(dictFile, line))
     {
         //skip if its a comment
@@ -121,9 +170,12 @@ int main()
         //skip if it doesn't contain valid characters
         if (!isValid(word)) continue;
         if (pho == phoneme && word != uInput)
-            cout << " " << word;
-    }
-    cout << "\nAdd phoneme      :";
+            identicals += word;
 
+        if (isAddedPhoneme(phoneme, pho))
+            addedPhonemes += word + ' ';
+    }
+    cout << "Identical        :" << identicals;
+    cout << "\nAdd phoneme      :" << addedPhonemes;
     return 0;
 }
