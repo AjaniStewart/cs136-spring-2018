@@ -22,9 +22,28 @@ int main() {
 	// for example we copy its contents into a new array
 	int out[MAX_H][MAX_W];
 
-	// and save this new image to file "outImage.pgm"
+	//and save this new image to file "outImage.pgm"
 	invertImage(img,out,h,w);
-	writeImage(out, h, w, "invert");
+	writeImage(out, h, w, "task-a");
 
+	readImage(img, h, w);
+	invertHalf(img,out,h,w);
+	writeImage(out,h,w,"task-b");
+
+	readImage(img, h, w);
+	box(img,out,h,w);
+	writeImage(out,h,w,"task-c");
+
+	readImage(img, h, w);
+	frame(img,out,h,w);
+	writeImage(out,h,w,"task-d");
+
+	readImage(img,h,w);
+	scale(img,out,h,w);
+	writeImage(out,h,w,"task-e");
+
+	readImage(img, h, w);
+	pixelate(img, out, h, w);
+	writeImage(out, h, w, "task-f");
 }
 
