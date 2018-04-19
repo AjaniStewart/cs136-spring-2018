@@ -40,7 +40,7 @@ int main() {
 
 	readImage(img,h,w);
 	scale(img,out,h,w);
-	writeImage(out,h,w,"task-e");
+	writeImage(out,2*h,2*w,"task-e");
 
 	readImage(img, h, w);
 	pixelate(img, out, h, w);

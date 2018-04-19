@@ -112,7 +112,7 @@ void frame(int inImage[MAX_H][MAX_W], int outImage[MAX_H][MAX_W], int height, in
             if ((((row == height / 4 && col > width / 4 && col < 3 * width / 4) || 
                 (row == 3 * height / 4 && col > width / 4 && col < 3 * width / 4)))
                 || (col == width / 4 && row > height / 4 && row < 3 * height / 4) || 
-                (col == 3 * width / 4 && row > height / 4 && row < 3 * height / 4))// || col == width / 4 || col == 3 * width / 4)
+                (col == 3 * width / 4 && row > height / 4 && row < 3 * height / 4))
                 outImage[row][col] = 255;
             else
                 outImage[row][col] = inImage[row][col];
