@@ -3,6 +3,7 @@
 #include <string>
 
 void printTime(Time time);
+std::string getGenre(Movie m);
 void printMovie(Movie mv);
 void printTimeSlot(TimeSlot ts);
 

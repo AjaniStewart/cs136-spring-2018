@@ -7,27 +7,26 @@ void printTime(Time time)
     std::cout << time.h << ":" << time.m;
 }
 
-void printMovie(Movie mv)
+std::string getGenre(Movie m)
 {
-    std::string g;
-    switch (mv.genre)
+    switch (m.genre)
     {
     case ACTION:
-        g = "ACTION";
-        break;
+        return "ACTION";
     case COMEDY:
-        g = "COMEDY";
-        break;
+        return "COMEDY";
     case DRAMA:
-        g = "DRAMA";
-        break;
+        return "DRAMA";
     case ROMANCE:
-        g = "ROMANCE";
-        break;
+        return "ROMANCE";
     case THRILLER:
-        g = "THRILLER";
-        break;
+        return "THRILLER";
     }
+}
+
+void printMovie(Movie mv)
+{
+    std::string g = getGenre(mv);
     std::cout << mv.title << " " << g << " (" << mv.duration << " min)";
 }
 
@@ -50,5 +49,16 @@ int minutesUntil(Time earlier, Time later)
 
 Time addMinutes(Time time0, int min)
 {
+    //TODO: FIX
     return Time{time0.h + min / 60, time0.m + min % 60};
+}
+
+std::string TimeSlotString(TimeSlot ts)
+{
+    std::string s;
+    Time endTime = addMinutes(ts.startTime, ts.movie.duration);
+    s = ts.movie.title + " " + getGenre(ts.movie) + " (" + std::to_string(ts.movie.duration) + " mins) ";
+    s += "[starts at " + std::to_string(ts.startTime.h) + ':' + std::to_string(ts.startTime.m) + ", ends by" 
+        + std::to_string(endTime.h) + ':' + std::to_string(endTime.m) + ']';
+    return s;
 }
