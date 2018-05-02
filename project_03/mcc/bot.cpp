@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include "bot.h"
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -18,9 +19,8 @@ Status robotStatus[MAX_ROBOT_NUM];
 //a map of what robots go to what debris
 int collector[MAX_ROBOT_NUM][MAX_ROBOT_NUM];
 
-//Find the closest debris
-//look in a circle(square) around the robot
-//increment
+//Find closest debris in an L Shape kind of
+//make a robot target that debris
 void setNearestDebris(Loc &robotLocation, Area &area, int id, ostream &log)
 {
 	int row = robotLocation.r;
@@ -68,6 +68,29 @@ void setNearestDebris(Loc &robotLocation, Area &area, int id, ostream &log)
 	}
 }
 
+Action moveRandom()
+{
+	switch (rand() % 4)
+	{
+	case 0: return LEFT;
+	case 1: return RIGHT;
+	case 2: return UP;
+	default: return DOWN;
+	}
+}
+
+// Action moveTowardsTarget (Loc target, Loc currentPosition)
+// {
+// 	int cRow = currentPosition.r;
+// 	int cCol = currentPosition.c;
+// 	int tRow = target.r;
+// 	int tCol = target.c;
+
+// 	if (tRow > cRow) { return DOWN; }
+// 	if (tRow < cRow) { return UP; }
+// 	if (tCol > cCol) { return RIGHT; }
+// 	if (tCol < cCol) { return LEFT; }
+// }
 /* Initialization procedure, called when the game starts: */
 void onStart(int num, int rows, int cols, double mpr,
              Area &area, ostream &log)
@@ -79,10 +102,9 @@ void onStart(int num, int rows, int cols, double mpr,
 	{
 		targetLocations[i] = Loc{-1,-1};
 		robotStatus[i] = UNASSIGNED;
-		//fixObligation[i] = -1;
 		for (int j=0; j<MAX_ROBOT_NUM; j++)
 		{
-			collector[i][j] = -1; // no collector
+			collector[i][j] = -1; // no robot going to that location
 		}
 	}
 	log << "Start!" << endl;
@@ -95,25 +117,60 @@ Action onRobotAction(int id, Loc loc, Area &area, ostream &log)
 	// current row and column
 	int row = loc.r; 
 	int col = loc.c;
-	if (area.inspect(row, col) == DEBRIS)
+
+	if ( area.inspect(row, col) == DEBRIS)
 	{
+		//collect if you are on debris
 		log << "COLLECTING: Robot " << id << "\n";
 		collector[row][col] = id;
 		return COLLECT;
 	}
+	
+	//make sure they do not stick to each other
+	for (int i = 0; i < NUM; ++i)
+	{
+		if (i == id) continue;
+		//if there are one away from another 
+		if ((area.locate(i).c == col && abs(area.locate(i).r - row) == 1) || 
+		(area.locate(i).r == row && abs(area.locate(i).c - col) == 1) )
+		{
+			//there is a broken robot nearby, fix it
+			if (robotStatus[i] == BROKEN)
+			{
+				robotStatus[id] = UNASSIGNED;
+				robotStatus[i] = UNASSIGNED;
+				if (area.locate(i).c == loc.c - 1)
+					return REPAIR_LEFT;
+				if (area.locate(i).c - 1 == loc.c)
+					return REPAIR_RIGHT;
+				if (area.locate(i).r == loc.r - 1)
+					return REPAIR_UP;
+				if (area.locate(i).r - 1 == loc.r)
+					return REPAIR_DOWN;
+			}
+			return moveRandom();
+		}
+			
+
+		if (robotStatus[i] == BROKEN)
+		{
+			robotStatus[id] = FIXING;
+			targetLocations[id] = Loc{area.locate(i).r-1,area.locate(i).c};
+		}
+	}
 	//stays in place
+	//hopefully
 	if (robotStatus[id] == BROKEN)
 	{
-		targetLocations[id] = loc;
-		return COLLECT;
+		return DOWN;
 	}
 	//find initial closest
 	if (robotStatus[id] == UNASSIGNED)
 	{
 		setNearestDebris(loc,area,id,log);
 	}
-	//go to where the debris is
-	if (robotStatus[id] == COLLECTING )
+	//go to where the debris is or where a broken robot is 
+	if (robotStatus[id] == COLLECTING || robotStatus[id] == FIXING)
 	{
 		if (targetLocations[id].r > row)
 		{
@@ -123,7 +180,8 @@ Action onRobotAction(int id, Loc loc, Area &area, ostream &log)
 		{
 			return UP;
 		}
-		else {
+		else 
+		{
 			if (targetLocations[id].c > col)
 			{
 				return RIGHT;
@@ -132,7 +190,7 @@ Action onRobotAction(int id, Loc loc, Area &area, ostream &log)
 			{
 				return LEFT;
 			}
-			else if (area.inspect(row, col) == DEBRIS)
+			 if (area.inspect(row, col) == DEBRIS)
 			{
 				log << "COLLECTING 2: Robot " << id << "\n";
 				collector[row][col] = id;
@@ -141,24 +199,14 @@ Action onRobotAction(int id, Loc loc, Area &area, ostream &log)
 			else
 			{
 				robotStatus[id] = UNASSIGNED;
-				targetLocations[id].r = -1;
-				targetLocations[id].c = -1;
-				return UP;
+				targetLocations[id] = Loc{-1,-1};
+				return moveRandom();
 			}
 		}
 	}
-	else {
-		switch (rand() % 4)
-		{
-		case 0:
-			return LEFT;
-		case 1:
-			return RIGHT;
-		case 2:
-			return UP;
-		default:
-			return DOWN;
-		}
+	else 
+	{
+		return moveRandom();
 	}
 }
 
