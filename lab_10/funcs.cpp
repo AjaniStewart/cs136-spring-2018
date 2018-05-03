@@ -49,8 +49,7 @@ int minutesUntil(Time earlier, Time later)
 
 Time addMinutes(Time time0, int min)
 {
-    //TODO: FIX
-    return Time{time0.h + min / 60, time0.m + min % 60};
+    return Time{time0.h + ((min + time0.m) / 60), (time0.m + min) % 60};
 }
 
 std::string TimeSlotString(TimeSlot ts)
@@ -58,7 +57,18 @@ std::string TimeSlotString(TimeSlot ts)
     std::string s;
     Time endTime = addMinutes(ts.startTime, ts.movie.duration);
     s = ts.movie.title + " " + getGenre(ts.movie) + " (" + std::to_string(ts.movie.duration) + " mins) ";
-    s += "[starts at " + std::to_string(ts.startTime.h) + ':' + std::to_string(ts.startTime.m) + ", ends by" 
+    s += "[starts at " + std::to_string(ts.startTime.h) + ':' + std::to_string(ts.startTime.m) + ", ends by " 
         + std::to_string(endTime.h) + ':' + std::to_string(endTime.m) + ']';
     return s;
+}
+
+TimeSlot scheduleAfter(TimeSlot ts, Movie nextMovie)
+{
+    return TimeSlot{nextMovie, addMinutes(ts.startTime, nextMovie.duration)};
+}
+
+bool timeOverlap(TimeSlot ts1, TimeSlot ts2)
+{   
+    //They overlap if the one that starts first is longer than the one that
+    //
 }

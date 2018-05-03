@@ -13,6 +13,7 @@ using a dictionary file in the working directory
 #include <fstream>
 #include <string>
 
+
 using namespace std;
 
 //helper functions
@@ -159,71 +160,84 @@ bool isReplacedPhoneme(const string& targetPho, const string& curPho)
             //check if the rest of the phonemes are th same
             return (subString(targetPho, tCount, targetPho.size()) ==
                     subString(curPho, cCount, curPho.size()));
-
         }
     }
-    
     return false;
 }
 
-int main()
+int main(int argc, char* argv[])
 {
-    string input;
-    cin >> input;
-    string uInput = toUpper(input); 
-    string line, phoneme, identicals, addedPhonemes, removedPhonemes, replacedPhonemes;
-    bool found = false;
-    fstream dictFile("cmudict.0.7a");
-    //first pass to find the inital pronunciatino
-    //consider making this a function
-    while(getline(dictFile, line))
-    {   
-        //skip if its a comment
-        if (line[0] == ';') continue;
-        string word, pho;
-        splitOnSpace(line,word,pho);
-        //skip if it doesn't contain valid characters
-        if (!isValid(word)) continue;
-        if (uInput == word)
+    if (argc < 2)
+    {
+        cout << "usage: ./pro <words> ... <word>\n";
+        exit(0);
+    }
+    fstream dictFile("cmudict.0.7a");    
+    for (int words = 1; words < argc; ++words)
+    {
+        //dictFile.seekg(0, ios::beg);
+        string input = argv[words];
+        string uInput = toUpper(input);
+        cout << "\nWORD: " << input << '\n';
+        string line, phoneme, identicals, addedPhonemes, removedPhonemes, replacedPhonemes;
+        bool found = false;
+        
+        //first pass to find the inital pronunciatino
+        //consider making this a function
+        while (getline(dictFile, line))
         {
-            cout << "Pronunciation    :" << pho << endl;
-            phoneme = pho;
-            found = true;
-            break;
+            //skip if its a comment
+            if (line[0] == ';')
+                continue;
+            string word, pho;
+            splitOnSpace(line, word, pho);
+            //skip if it doesn't contain valid characters
+            if (!isValid(word))
+                continue;
+            if (uInput == word)
+            {
+                cout << "Pronunciation    :" << pho << endl;
+                phoneme = pho;
+                found = true;
+                break;
+            }
         }
-    }
-    //end early if it is not in the dict
-    if (!found)
-    {
-        cout << "Not found" << endl;
-        return 0;
-    }
-    //reset to the top of the file
-    dictFile.seekg(0, ios::beg);
+        //end early if it is not in the dict
+        if (!found)
+        {
+            cout << "Not found" << endl;
+            continue;
+        }
+        //reset to the top of the file
+        dictFile.seekg(0, ios::beg);
 
-    //main loop
-    while (getline(dictFile, line))
-    {
-        //skip if its a comment
-        if (line[0] == ';') continue;
-        string word, pho;
-        splitOnSpace(line, word, pho);
-        //skip if it doesn't contain valid characters
-        if (!isValid(word)) continue;
-        //check for the stuff
-        if (pho == phoneme && word != uInput)
-            identicals += word + ' ';
-        else if (isAddedPhoneme(phoneme, pho))
-            addedPhonemes += word + ' ';
-        else if (isRemovedPhoneme(phoneme,pho))
-            removedPhonemes += word + ' ';
-        else if (isReplacedPhoneme(phoneme,pho))
-            replacedPhonemes += word + ' ';
-
+        //main loop
+        while (getline(dictFile, line))
+        {
+            //skip if its a comment
+            if (line[0] == ';')
+                continue;
+            string word, pho;
+            splitOnSpace(line, word, pho);
+            //skip if it doesn't contain valid characters
+            if (!isValid(word))
+                continue;
+            //check for the stuff
+            if (pho == phoneme && word != uInput)
+                identicals += word + ' ';
+            else if (isAddedPhoneme(phoneme, pho))
+                addedPhonemes += word + ' ';
+            else if (isRemovedPhoneme(phoneme, pho))
+                removedPhonemes += word + ' ';
+            else if (isReplacedPhoneme(phoneme, pho))
+                replacedPhonemes += word + ' ';
+        }
+        cout << "Identical        : " << identicals;
+        cout << "\nAdd phoneme      : " << addedPhonemes;
+        cout << "\nRemove phoneme   : " << removedPhonemes;
+        cout << "\nReplace phoneme  : " << replacedPhonemes;
+        cout << "\n\n\n ---------------------------------------------------------------------------------------------------\n";
+        dictFile.seekg(0, ios::beg);
     }
-    cout << "Identical        :" << identicals;
-    cout << "\nAdd phoneme      : " << addedPhonemes;
-    cout << "\nRemove phoneme   : " << removedPhonemes;
-    cout << "\nReplace phoneme  : " << replacedPhonemes;
     return 0;
 }

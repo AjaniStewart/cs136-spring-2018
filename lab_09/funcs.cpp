@@ -146,3 +146,4 @@ void pixelate(int inImage[MAX_H][MAX_W], int outImage[MAX_H][MAX_W], int height,
             outImage[row+1][col+1] = avg;
         }
 }
+
