@@ -56,7 +56,7 @@ std::string TimeSlotString(TimeSlot ts)
 {
     std::string s;
     Time endTime = addMinutes(ts.startTime, ts.movie.duration);
-    s = ts.movie.title + " " + getGenre(ts.movie) + " (" + std::to_string(ts.movie.duration) + " mins) ";
+    s = ts.movie.title + " " + getGenre(ts.movie) + " (" + std::to_string(ts.movie.duration) + " min) ";
     s += "[starts at " + std::to_string(ts.startTime.h) + ':' + std::to_string(ts.startTime.m) + ", ends by " 
         + std::to_string(endTime.h) + ':' + std::to_string(endTime.m) + ']';
     return s;
@@ -71,4 +71,11 @@ bool timeOverlap(TimeSlot ts1, TimeSlot ts2)
 {   
     //They overlap if the one that starts first is longer than the one that
     //
+    TimeSlot earlier = (minutesSinceMidnight(ts1.startTime) < minutesSinceMidnight(ts2.startTime)
+        ? ts1 : ts2);
+
+    TimeSlot later = (minutesSinceMidnight(ts1.startTime) > minutesSinceMidnight(ts2.startTime)
+                          ? ts1 : ts2);
+    int interval = minutesUntil(earlier.startTime,later.startTime);
+    return (earlier.movie.duration > interval);
 }

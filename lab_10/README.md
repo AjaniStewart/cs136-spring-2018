@@ -1,1 +1,1 @@
-Took one full lab period plus
+Took one full lab period plus 15 extra minutes to write the functions. Writing tests took me about 30 minutes. So, in total, 2 hours.

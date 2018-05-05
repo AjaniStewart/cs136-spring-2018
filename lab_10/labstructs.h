@@ -28,3 +28,4 @@ struct TimeSlot
     Movie movie;
     Time startTime;
 };
+

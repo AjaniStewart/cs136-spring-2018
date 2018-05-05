@@ -9,7 +9,7 @@ main.o: main.cpp funcs.h labstructs.h
 funcs.o: funcs.cpp labstructs.h
 
 tests: tests.o funcs.o
-	g++ -o tests.o funcs.o $(CXXFLAGS)
+	g++ -o tests tests.o funcs.o $(CXXFLAGS)
 
 tests.o: funcs.h labstructs.h doctest.h
 
