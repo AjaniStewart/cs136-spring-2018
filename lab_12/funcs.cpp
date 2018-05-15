@@ -46,4 +46,5 @@ bool nestedParens(std::string s)
 bool divisible(int *prices, int size)
 {
     if (size == 2) return prices[0] == prices[1];
+    return true;
 }
