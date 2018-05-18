@@ -36,12 +36,15 @@ int main()
     // cout << isAlphanumeric("Abcd1234xyz") << endl; // true (1)
     // cout << isAlphanumeric("KLMN 8-7-6") << endl;  // false (0)
 
-    cout << nestedParens("((()))") << endl; // true (1)
-    cout << nestedParens("()") << endl;     // true (1)
-    cout << nestedParens("") << endl;       // true (1)
+    // cout << nestedParens("((()))") << endl; // true (1)
+    // cout << nestedParens("()") << endl;     // true (1)
+    // cout << nestedParens("") << endl;       // true (1)
 
-    cout << nestedParens("(((") << endl;   // false (0)
-    cout << nestedParens("(()") << endl;   // false (0)
-    cout << nestedParens(")(") << endl;    // false (0)
-    cout << nestedParens("a(b)c") << endl; // false (0)
+    // cout << nestedParens("(((") << endl;   // false (0)
+    // cout << nestedParens("(()") << endl;   // false (0)
+    // cout << nestedParens(")(") << endl;    // false (0)
+    // cout << nestedParens("a(b)c") << endl; // false (0)
+
+    int prices [] = {10, 15, 12, 18, 19, 17};
+    cout << divisible(prices,6);
 }

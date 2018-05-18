@@ -43,8 +43,14 @@ bool nestedParens(std::string s)
     return (s[0] == '(' && s[s.size()-1] == ')' && nestedParens(s.substr(1,s.size()-2)));
 }
 
+bool divisibleAlpha(int *prices, int size, int sum1, int sum2)
+{
+    if (size == 0) return sum1 == sum2;
+    return divisibleAlpha(prices,size-1,sum1 + prices[size-1], sum2) || 
+        divisibleAlpha(prices,size-1,sum1,prices[size-1]+sum2);
+}
+
 bool divisible(int *prices, int size)
 {
-    if (size == 2) return prices[0] == prices[1];
-    return true;
+    return divisibleAlpha(prices,size,0,0);
 }
