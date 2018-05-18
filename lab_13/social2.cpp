@@ -59,7 +59,7 @@ public:
 
 
 int main() {
-    cout << boolalpha;
+
    Network nw;
   cout << nw.addUser("mario", "Mario") << endl;     // true (1)
   cout << nw.addUser("luigi", "Luigi") << endl;     // true (1)
