@@ -20,5 +20,21 @@ taskd: social4.o
 
 social4.o: social4.cpp
 
+all:
+	@make taska
+	@make taskb
+	@make taskc
+	@make taskd
+
+run:
+	@echo "Task A"
+	@./taska
+	@echo "Task B"
+	@./taskb
+	@echo "Task C"
+	@./taskc
+	@echo "Task D"
+	@./taskd
+
 clean:
 	rm -rf taska taskb taskc taskd social.o social2.o social3.o social4.o
